@@ -5,6 +5,7 @@ MAINTAINER Guo Yukun
 RUN sed -i "s/archive.ubuntu./mirrors.aliyun./g" /etc/apt/sources.list
 
 RUN apt-get update &&\
+    apt-get install -y git &&\
     apt-get install -y wget vim psmisc &&\
 	# 依赖包
 	apt-get -y install libev-dev libssl-dev libmpdec-dev libjansson-dev   libmysqlclient-dev &&\
@@ -15,6 +16,7 @@ RUN apt-get update &&\
 	# 建立工作目录
 	mkdir /src/ &&\
 	cd /src
+   
 
 WORKDIR /src/
 
@@ -47,10 +49,7 @@ RUN  apt-get update &&\
 ADD build.sh /src/build.sh
 
 # 编译viabtc
-RUN wget https://codeload.github.com/qyvlik/viabtc_exchange_server/tar.gz/master -O /src/viabtc.tar.gz &&\
- 	tar xzvf /src/viabtc.tar.gz  &&\
- 	rm -rf /src/viabtc.tar.gz &&\
- 	mv viabtc_exchange_server-* viabtc &&\
+RUN git clone https://github.com/viabtc/viabtc_exchange_server /src/viabtc &&\
     cd /src/viabtc/network &&\
     make clean && make &&\
     cd /src/viabtc/depends/hiredis &&\
